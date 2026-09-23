@@ -1,0 +1,89 @@
+{
+  "1": {
+    "inputs": {
+      "text": "wearing a black leather jacket, standing in Tokyo at night under neon lights"
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "2": {
+    "inputs": {
+      "image": "uploads/base_face.jpg"
+    },
+    "class_type": "LoadImage"
+  },
+  "3": {
+    "inputs": {
+      "ckpt_name": "sd_xl_base_1.0.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple"
+  },
+  "4": {
+    "inputs": {
+      "instantid_file": "ip-adapter_instantid_sdxl.bin"
+    },
+    "class_type": "InstantIDModelLoader"
+  },
+  "5": {
+    "inputs": {
+      "provider": "CPU"
+    },
+    "class_type": "InsightFaceLoader"
+  },
+  "6": {
+    "inputs": {
+      "weight": 0.85,
+      "start_at": 0.0,
+      "end_at": 1.0,
+      "instantid": ["4", 0],
+      "insightface": ["5", 0],
+      "image": ["2", 0],
+      "model": ["3", 0],
+      "positive": ["1", 0],
+      "negative": ["7", 0]
+    },
+    "class_type": "ApplyInstantID"
+  },
+  "7": {
+    "inputs": {
+      "text": "ugly, deformed, blurry, low resolution, bad facial features"
+    },
+    "class_type": "CLIPTextEncode"
+  },
+  "8": {
+    "inputs": {
+      "seed": 42,
+      "steps": 20,
+      "cfg": 7.0,
+      "sampler_name": "euler",
+      "scheduler": "normal",
+      "denoise": 1.0,
+      "model": ["6", 0],
+      "positive": ["6", 1],
+      "negative": ["6", 2],
+      "latent_image": ["9", 0]
+    },
+    "class_type": "KSampler"
+  },
+  "9": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptyLatentImage"
+  },
+  "10": {
+    "inputs": {
+      "samples": ["8", 0],
+      "vae": ["3", 2]
+    },
+    "class_type": "VAEDecode"
+  },
+  "11": {
+    "inputs": {
+      "filename_prefix": "FaceLock_Edit",
+      "images": ["10", 0]
+    },
+    "class_type": "SaveImage"
+  }
+}

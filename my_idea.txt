@@ -1,0 +1,7 @@
+face_lock_project/
+│
+├── workflow_api.json   <-- ComfyUI API Execution Graph
+├── app.py              <-- FastAPI Backend Server
+├── ui.py               <-- Streamlit Web App Interface
+├── uploads/            <-- Automatically created for uploaded face images
+└── outputs/            <-- Automatically created for finished edited images
